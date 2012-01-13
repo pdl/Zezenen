@@ -34,6 +34,7 @@ is_deeply(
 	$parser->parse('block', "p{{ a[href]{{  } img{{}} }} }}"),
 	'Extra curlies have no effect');
 is( $parser->parse('directive_marker', '!'), '!', 'directive_marker works');
-# is_deeply( $parser->parse('element_or_directive_name', "!U"), {'#name'=>'U', '#directive'=>1}, 'element_or_directive_name works');
+is_deeply( $parser->parse('element_or_directive_name', "!U"), {'#name'=>'U', '#directive'=>1}, 'element_or_directive_name works');
+is_deeply( $parser->parse('block', "!U{a0}"), {'#name'=>'U', '#directive'=>1, '~'=>['a0']}, 'can parse complete directives');
 
 done_testing;

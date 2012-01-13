@@ -81,11 +81,11 @@ q`
 
 	selector_multi: ( selector_attr | selector_class )
 	directive_marker: '!'
-	element_or_directive_name: directive_marker(?) qname 
+	element_or_directive_name: /!?([A-Za-z][\\w\\-]*:)?[A-Za-z][\\w\\-]*/
 	{
 		$return = {};
-		$return->{'#directive'} = 1 if defined ($item{directive_marker});
-		$return->{'#name'}=$item{qname};
+		$return->{'#directive'} = 1 if $item[1] =~ s/^!//;
+		$return->{'#name'}=$item[1];
 		
 	}
 	selector: element_or_directive_name(1) selector_multi(s?) selector_id(?) selector_multi(s?) selector_iterator(?)
