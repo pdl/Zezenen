@@ -47,7 +47,14 @@ sub filter_element
 sub filter_directive
 {
 	my ($self, $target, $args) = @_;
-	return [map {$self->filter($_, $args)} @{$self->{'~'}}];
+	if ($target->{'#name'} eq 'PI' and $target->{'target'})
+	{
+		my $pi = XML::LibXML::PI->new(); # This method doesn't exist. Why not?!
+		$pi->setNodeName($target->{'target'});
+		$pi->setData(join('',map {$self->filter($_, $args)} @{$target->{'~'}}));
+		return $pi;
+	}
+	return [map {$self->filter($_, $args)} @{$target->{'~'}}];
 }
 sub filter #Takes a parse tree and processes it
 {

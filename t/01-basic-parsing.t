@@ -6,6 +6,9 @@ use Parse::Zezenen::RecDescent;
 use Data::Dumper;
 $Data::Dumper::Sortkeys = 1;
 my $parser = Parse::Zezenen::RecDescent->new;
+
+# NOTE: All tests are subject to change until the whitespace model is finalised
+
 is_deeply( Parse::Zezenen::RecDescent::_flatten( [ [1,2] ,3] ), [1,2,3], 'Flatten works for 2d lists');
 is( $parser->parse('qname', 'test_qname'), 'test_qname', 'qname parses');
 is( $parser->parse('qname', '1bad'), undef, 'Not a qname: 1bad');
@@ -28,7 +31,7 @@ is_deeply( $parser->parse('selector', "a[href='http://example.com/?q=%20']"), {'
 is_deeply( $parser->parse('selector', "div.section-title#content.red"), {'#name'=>'div',class=>'red section-title', id=>'content'}, "selector works for div.section-title#content.red");
 is_deeply( $parser->parse('block', "div{ test }"), {'#name'=>'div','~'=>[' ','test',' ']}, 'block parses div{ test }');
 is_deeply( $parser->parse('block', "div{test}"), {'#name'=>'div','~'=>['test']}, 'block parses div{test}');
-is_deeply( $parser->parse('block', "div{ test{} }"), {'#name'=>'div','~'=>[' ',{'#name'=>'test', '~'=>[]}, ' ']}, 'block parses div{ test{} }');
+is_deeply( $parser->parse('block', "div{ test{}  }"), {'#name'=>'div','~'=>[' ',{'#name'=>'test', '~'=>[]}, ' ']}, 'block parses div{ test{} }');
 is_deeply( 
 	$parser->parse('block',   "p{ a[href]{{  } img{{}} }} }"),
 	$parser->parse('block', "p{{ a[href]{{  } img{{}} }} }}"),

@@ -26,7 +26,7 @@ q`
 	qname: /([A-Za-z][\\w\\-]*:)?[A-Za-z][\\w\\-]*/
 `,
 q`
-	horizontal_space: /[\\t\\x20]/ 
+	horizontal_space: /[\\t\\x20]+/ 
 	line_plus_any_indent: /(?:\\r\\n|\\n|\\r)[\\t\\x20]*/
 	non_space_text: /[^{}!\\s\\t\\r\\n]+/
 	any_space: /[\\r\\t\\n\\x20]/
@@ -62,6 +62,12 @@ q`
 	block: selector any_space(s?) blockcontent[%arg]
 	{
 		my $content = $item{blockcontent}; # map {@{$_} if ref $_ eq ref []}
+		# this bit removes the final space in a block if the preceding non-horizontal-space character is an element. 
+		if ($#{$content}>0 and $content->[-1] =~ /^[\\t\\x20]+$/ and ref($content->[-2]) eq ref{})
+		{
+			chop $content->[-1];
+			$#{$content}-- if $content->[-1] eq '';
+		}
 		$return = {%{$item{selector}}, '~'=>$content};
 	}	
 
