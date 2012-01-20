@@ -2,7 +2,7 @@ package Parse::Zezenen::Filter::Interpreter;
 use 5.006;
 use strict;
 use warnings;
-use base Parse::Zezenen::Filter::Base;
+use base "Parse::Zezenen::Filter::Base";
 
 =head1 NAME
 
@@ -51,4 +51,4 @@ sub filter_directive
 
 	return $self->copy_and_filter_children($target, $args);
 }
-
+1;
