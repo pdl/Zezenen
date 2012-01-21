@@ -23,6 +23,22 @@ sub filter_string
 sub filter_array
 {
 	my ($self, $target, $args) = @_;
+	my $preceding ='';
+	$self->array_merge_text_nodes($target, $args);
+	foreach (@{$target})
+	{
+		if (ref($_) eq ref (''))
+		{
+			if (ref ($preceding) eq ref ({}))
+			{	
+				if ($_=~m/^[\x20\t]*\}/)
+				{
+					$_ = ' '.$_
+				}
+			}
+		}
+		$preceding = $_;
+	}
 	my $s = join ('', map{$self->filter($_, $args)} @{$target});
 	if ($s =~ m/\}[\x20\t]*$/)
 	{
@@ -30,13 +46,17 @@ sub filter_array
 	}
 	return $s;
 }
-
+sub filter_directive
+{
+	my ($self, $target, $args) = @_;
+	return $self->filter_element($target, $args);
+}
 sub filter_element
 {
 	my ($self, $target, $args) = @_;
 	my $iCurlies = $self->get_curlies($target);
 	$iCurlies||=1;
-	$iCurlies = $args->{'curlies'} if defined ($args->{'curlies'}) and $iCurlies > $args->{'curlies'};
+	$iCurlies = $args->{'curlies'} if defined ($args->{'curlies'}) and $iCurlies < $args->{'curlies'};
 	my $s='';
 	$s .= '!' if $target->{'#directive'};
 	$s .= $target->{'#name'};
@@ -47,7 +67,7 @@ sub filter_element
 		$val =~ s/\"/\"/g;
 		$s .= '['.$key.'="'.$val.'"]';
 	}
-	$s .= ('{' x $iCurlies) . ($self->filter($target->{'~'})) . ('}' x $iCurlies);
+	$s .= ('{' x $iCurlies) . ($self->filter($target->{'~'}, {%$args, curlies=>$iCurlies})) . ('}' x $iCurlies);
 	return $s;
 }
 sub get_curlies

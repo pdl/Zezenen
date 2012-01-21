@@ -31,12 +31,36 @@ foreach my $test (
 		zz=>"code{{} }}"
 	},
 	{
+		desc=>"double curlies with mixed content",
+		zz=>"code{{}b{{}} }}"
+	},
+	{
+		desc=>"double curlies with mixed content and triple curlies",
+		zz=>"code{{}b{{{}} }}} }}"
+	},
+	{
+		desc=>"double curlies with mixed content and triple curlies and closing text curly after element",
+		zz=>"code{{}b{{{}} }}} } }}"
+	},
+	{
+		desc=>"double curlies with mixed content and triple curlies and space+closing text curly after element",
+		zz=>"code{{}b{{{}} }}}  } }}"
+	},
+	{
+		desc=>"directive",
+		zz=>'!TEST{contents}'
+	},
+	{
 		desc=>"simple attribute",
 		zz=>'b[color="red"]{test}'
 	},
 	{
 		desc=>"simple attribute with escaped quotes",
 		zz=>"b[style=\"color: \\\"red\\\"\"]{test}"
+	},
+	{
+		desc=>"namespaces!",
+		zz=>'xsl:template[match="*"]{xsl:copy-of[select="@*|node()"]{} }'
 	},
 
 )

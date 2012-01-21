@@ -1,15 +1,19 @@
 Changes
-lib/Parse/Zezenen/RecDescent.pm
-lib/Parse/Zezenen/Filter/Base.pm
-lib/Parse/Zezenen/Filter/Interpreter.pm
-lib/Parse/Zezenen/Filter/LibXML.pm
-lib/Parse/Zezenen/Filter/Serialise.pm
+lib/Parse/Zezenen/RecDescent.pm			The module for parsing
+lib/Parse/Zezenen/Filter/Base.pm			A base class for filters
+lib/Parse/Zezenen/Filter/Interpreter.pm			A filter for interpreting universal directives
+lib/Parse/Zezenen/Filter/LibXML.pm			A filter for serialising as XML via XML::LibXML
+lib/Parse/Zezenen/Filter/Serialise.pm			A filter for serialising as Zezenen
 Makefile.PL
 MANIFEST			This list of files
 README
 t/00-load.t
 t/01-basic-parsing.t
 t/02-filter-base.t
+03-filter-interpret.t
+04-filter-libxml.t
+05-filter-serialise.t
 t/manifest.t
 t/pod-coverage.t
 t/pod.t
+
