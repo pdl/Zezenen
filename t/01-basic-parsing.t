@@ -31,11 +31,15 @@ is_deeply( $parser->parse('selector', "a[href='http://example.com/?q=%20']"), {'
 is_deeply( $parser->parse('selector', "div.section-title#content.red"), {'#name'=>'div',class=>'red section-title', id=>'content'}, "selector works for div.section-title#content.red");
 is_deeply( $parser->parse('block', "div{ test }"), {'#name'=>'div','~'=>[' ','test',' ']}, 'block parses div{ test }');
 is_deeply( $parser->parse('block', "div{test}"), {'#name'=>'div','~'=>['test']}, 'block parses div{test}');
-is_deeply( $parser->parse('block', "div{ test{}  }"), {'#name'=>'div','~'=>[' ',{'#name'=>'test', '~'=>[]}, ' ']}, 'block parses div{ test{} }');
+
+is_deeply( $parser->parse('block', "div{ test{}  }"), {'#name'=>'div','~'=>[' ',{'#name'=>'test', '~'=>[]}, ' ']}, 'block parses div{ test{}  }');
 is_deeply( 
 	$parser->parse('block',   "p{ a[href]{{  } img{{}} }} }"),
 	$parser->parse('block', "p{{ a[href]{{  } img{{}} }} }}"),
 	'Extra curlies have no effect');
+is_deeply( $parser->parse('block', "b{{ } }}"), {'#name'=>'b','~'=>[' ', '}',]}, "block parses content of b{{ } }} as [' ','{']");
+is_deeply( $parser->parse('block', "div{{ b{{test}} } }}"), {'#name'=>'div','~'=>[' ',{'#name'=>'b', '~'=>['test']}, '}']}, "block parses content of div{{ b{{test}} } }} correctly");
+
 is( $parser->parse('directive_marker', '!'), '!', 'directive_marker works');
 is_deeply( $parser->parse('element_or_directive_name', "!U"), {'#name'=>'U', '#directive'=>1}, 'element_or_directive_name works');
 is_deeply( $parser->parse('block', "!U{a0}"), {'#name'=>'U', '#directive'=>1, '~'=>['a0']}, 'can parse complete directives');

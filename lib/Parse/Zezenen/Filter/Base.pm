@@ -44,7 +44,7 @@ sub array_merge_text_nodes
 	{
 		if (
 			$i > 0
-			and ( ref  ($interpreted[$i])  eq ref ('') )
+			and ( ref ($interpreted[ $i     ]) eq ref ('') )
 			and ( ref ($interpreted[ $i - 1 ]) eq ref ('') )
 		)
 		{

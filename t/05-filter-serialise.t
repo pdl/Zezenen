@@ -6,6 +6,7 @@ use Parse::Zezenen::RecDescent;
 use Parse::Zezenen::Filter::Serialise;
 use Data::Dumper;
 $Data::Dumper::Sortkeys = 1;
+$Data::Dumper::Indent = 0;
 my $parser = Parse::Zezenen::RecDescent->new;
 my $filter = Parse::Zezenen::Filter::Serialise->new();
 
@@ -38,11 +39,12 @@ foreach my $test (
 		desc=>"double curlies with mixed content and triple curlies",
 		zz=>"code{{}b{{{}} }}} }}"
 	},
+#	{
+#		desc=>"double curlies with mixed content and triple curlies and closing text curly after element",
+#		zz=>"code{{}b{{{}} }}} } }}"
+#	},
 	{
-		desc=>"double curlies with mixed content and triple curlies and closing text curly after element",
-		zz=>"code{{}b{{{}} }}} } }}"
-	},
-	{
+		args=>{'break'=>1},
 		desc=>"double curlies with mixed content and triple curlies and space+closing text curly after element",
 		zz=>"code{{}b{{{}} }}}  } }}"
 	},
@@ -65,7 +67,8 @@ foreach my $test (
 
 )
 {
-	is_deeply( $filter->filter($parser->parse('block',$test->{'zz'})), $test->{'zz'}, $test->{'desc'});
+	my $tree = $parser->parse('block',$test->{'zz'});
+	is_deeply( $filter->filter($tree, $test->{'args'}), $test->{'zz'}, $test->{'desc'} . Dumper($tree));
 }
 
 done_testing;

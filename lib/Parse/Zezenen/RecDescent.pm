@@ -63,6 +63,41 @@ q`
 	{
 		my $content = $item{blockcontent}; # map {@{$_} if ref $_ eq ref []}
 		# this bit removes the final space in a block if the preceding non-horizontal-space character is an element or ends in }. 
+		my $preceding_hash;
+		foreach my $i (0..$#{$content} )
+		{
+			if (ref ($content->[$i]) eq ref ({}))
+			{
+				$preceding_hash = $i;
+			}
+			elsif (ref ($content->[$i]) eq ref (''))
+			{
+				if (defined ($preceding_hash))
+				{
+					my $sToTest = '';
+					foreach my $j ($preceding_hash+1 .. $i)
+					{
+						$sToTest .= $content->[$j];
+					}
+					if ($sToTest =~ m/^\\x20[\\x20\\t]*\}/)
+					{
+						$content->[$preceding_hash+1] =~ s/^\\x20//;
+						if ($content->[$preceding_hash+1] eq '')
+						{
+							foreach my $j (2 .. $#{$content})
+							{
+								$content->[$preceding_hash+$j-1] = $content->[$preceding_hash+$j];
+							}
+							delete $content->[$#{$content}];
+						}
+					}
+					unless ($sToTest =~ m/^\\x20[\\x20\\t]*$/)
+					{
+						$preceding_hash = undef;
+					}
+				}
+			}
+		}
 		if ($#{$content}>0 and $content->[-1] =~ /^[\\t\\x20]+$/ and (ref($content->[-2]) eq ref{} or (ref($content->[-2]) eq ref ('') and $content->[-2]=~m/\}$/ )))
 		{
 			chop $content->[-1];

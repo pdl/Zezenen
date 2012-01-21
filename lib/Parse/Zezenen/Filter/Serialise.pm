@@ -3,10 +3,10 @@ use 5.006;
 use strict;
 use warnings;
 use base "Parse::Zezenen::Filter::Base";
-
+use Data::Dumper;
 =head1 NAME
 
-Parse::Zezenen::Filter::Interpreter
+Parse::Zezenen::Filter::Serialise
 
 =cut
 
@@ -23,21 +23,16 @@ sub filter_string
 sub filter_array
 {
 	my ($self, $target, $args) = @_;
-	my $preceding ='';
-	$self->array_merge_text_nodes($target, $args);
-	foreach (@{$target})
+	$target = $self->array_merge_text_nodes($target, $args);
+	foreach my $i ( 1 .. $#{$target} )
 	{
-		if (ref($_) eq ref (''))
+		if (ref($target->[$i]) eq ref (''))
 		{
-			if (ref ($preceding) eq ref ({}))
-			{	
-				if ($_=~m/^[\x20\t]*\}/)
-				{
-					$_ = ' '.$_
-				}
+			if (ref ($target->[$i-1]) eq ref ({}))
+			{
+				$target->[$i] =~ s/^([\x20\t]*\})/ $1/; 
 			}
 		}
-		$preceding = $_;
 	}
 	my $s = join ('', map{$self->filter($_, $args)} @{$target});
 	if ($s =~ m/\}[\x20\t]*$/)
