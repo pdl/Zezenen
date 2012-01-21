@@ -62,8 +62,8 @@ q`
 	block: selector any_space(s?) blockcontent[%arg]
 	{
 		my $content = $item{blockcontent}; # map {@{$_} if ref $_ eq ref []}
-		# this bit removes the final space in a block if the preceding non-horizontal-space character is an element. 
-		if ($#{$content}>0 and $content->[-1] =~ /^[\\t\\x20]+$/ and ref($content->[-2]) eq ref{})
+		# this bit removes the final space in a block if the preceding non-horizontal-space character is an element or ends in }. 
+		if ($#{$content}>0 and $content->[-1] =~ /^[\\t\\x20]+$/ and (ref($content->[-2]) eq ref{} or (ref($content->[-2]) eq ref ('') and $content->[-2]=~m/\}$/ )))
 		{
 			chop $content->[-1];
 			$#{$content}-- if $content->[-1] eq '';

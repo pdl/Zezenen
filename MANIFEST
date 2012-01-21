@@ -2,6 +2,8 @@ Changes
 lib/Parse/Zezenen/RecDescent.pm
 lib/Parse/Zezenen/Filter/Base.pm
 lib/Parse/Zezenen/Filter/Interpreter.pm
+lib/Parse/Zezenen/Filter/LibXML.pm
+lib/Parse/Zezenen/Filter/Serialise.pm
 Makefile.PL
 MANIFEST			This list of files
 README
