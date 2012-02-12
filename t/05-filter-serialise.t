@@ -39,10 +39,10 @@ foreach my $test (
 		desc=>"double curlies with mixed content and triple curlies",
 		zz=>"code{{}b{{{}} }}} }}"
 	},
-#	{
-#		desc=>"double curlies with mixed content and triple curlies and closing text curly after element",
-#		zz=>"code{{}b{{{}} }}} } }}"
-#	},
+	{
+		desc=>"double curlies with mixed content and triple curlies and closing text curly after element",
+		zz=>"code{{}b{{{}} }}} } }}"
+	},
 	{
 		args=>{'break'=>1},
 		desc=>"double curlies with mixed content and triple curlies and space+closing text curly after element",
@@ -63,6 +63,13 @@ foreach my $test (
 	{
 		desc=>"namespaces!",
 		zz=>'xsl:template[match="*"]{xsl:copy-of[select="@*|node()"]{} }'
+	},
+	{
+		args=>{'indentlevel'=>0,'indentchar'=>' '},
+		desc=>"namespaces and newlines",
+		zz=>'xsl:template[match="*"]{
+	xsl:copy-of[select="@*|node()"]{}
+}'
 	},
 
 )

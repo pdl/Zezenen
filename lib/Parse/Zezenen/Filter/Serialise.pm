@@ -35,7 +35,7 @@ sub filter_array
 		}
 	}
 	my $s = join ('', map{$self->filter($_, $args)} @{$target});
-	if ($s =~ m/\}[\x20\t]*$/)
+	if ($s =~ m/\}[\x20\t]*\z/) # must use \z here not $
 	{
 		$s .= ' ';
 	}
@@ -74,7 +74,7 @@ sub get_curlies
 		my $i = 0;
 		if (ref ($node) eq ref({}))
 		{
-			$i = $self->get_curlies($_, $args);
+		#	$i = $self->get_curlies($node, $args);
 		}
 		elsif (ref ($node) eq ref(''))
 		{
